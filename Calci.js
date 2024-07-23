@@ -8,19 +8,39 @@ function add(numbers) {
         numbers = numbers.substring(delimiterLineEnd + 1);
     }
 
-   
-    const tokens = numbers.split(delimiter);
-    
+    // Replace delimiters with commas and split into tokens
+    numbers = numbers.replace(delimiter, ',');
+    const tokens = numbers.split(',');
+
     let sum = 0;
+    const negativeNumbers = [];
 
     tokens.forEach(token => {
-        const num = parseFloat(token);
+        const num = parseInt(token, 10);
         if (!isNaN(num)) {
-            sum += num;
+            if (num < 0) {
+                negativeNumbers.push(num);
+            } else {
+                sum += num;
+            }
         }
     });
 
+    if (negativeNumbers.length > 0) {
+        throw new Error(`Negative numbers not allowed: ${negativeNumbers.join(", ")}`);
+    }
+
     return sum;
+}
+
+function appendNumber(number) {
+    const inputString = document.getElementById("inputString");
+    inputString.value += number;
+}
+
+function clearDisplay() {
+    document.getElementById("inputString").value = "";
+    document.getElementById("result").textContent = "Result: 0";
 }
 
 function calculate() {
@@ -32,14 +52,4 @@ function calculate() {
     } catch (error) {
         resultDiv.textContent = `Error: ${error.message}`;
     }
-}
-
-function appendNumber(number) {
-    const inputStringElement = document.getElementById("inputString");
-    inputStringElement.value += number;
-}
-
-function clearDisplay() {
-    document.getElementById("inputString").value = '';
-    document.getElementById("result").textContent = 'Result: 0';
 }
